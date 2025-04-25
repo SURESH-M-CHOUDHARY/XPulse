@@ -1,0 +1,10 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/api/points/route": "/api/points",
+  "/api/rewards/route": "/api/rewards",
+  "/api/quests/route": "/api/quests",
+  "/dashboard/rewards/page": "/dashboard/rewards",
+  "/dashboard/page": "/dashboard",
+  "/page": "/",
+  "/dashboard/stats/page": "/dashboard/stats"
+}
