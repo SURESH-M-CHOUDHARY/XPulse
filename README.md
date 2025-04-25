@@ -1,25 +1,44 @@
 # XPulse - Gamify Your Life 🎮
 
-XPulse is a modern habit-tracking application that turns your daily tasks into an engaging RPG-like experience. Level up your life by completing tasks, earning points, and unlocking rewards!
+XPulse is a modern habit-tracking application that turns your daily tasks into an engaging RPG-like experience. Level up your life by completing quests, earning XP, and unlocking rewards!
 
 ## Features ✨
 
-- **Task-Based Point System**: Earn points by completing daily tasks and challenges
-- **Photo Proof**: Upload photos to verify task completion for bonus points
-- **Reward System**: Spend earned points on customizable rewards
-- **Time Management**: Built-in timer for tasks and rewards
-- **PWA Support**: Install as a native app on any device
-- **Real-time Notifications**: Get notified when timers end
+- **Quest System**: Complete daily quests to earn XP
+- **Reward System**: Spend earned XP on customizable rewards
+- **Quest Types**: Various quest categories (Focus, Creativity, Physical, Learning, Social, Wellness)
+- **Progress Tracking**: Track your active quests and rewards with built-in timers
+- **Points Management**: Dynamic XP system that updates in real-time
 - **Modern UI**: Beautiful, responsive design with dark mode support
+- **Secure Authentication**: User authentication and data protection
 
 ## Tech Stack 🛠
 
-- **Frontend**: Next.js 14 (App Router)
-- **Styling**: Tailwind CSS + ShadcnUI
-- **Authentication**: Clerk Auth
-- **PWA**: next-pwa
-- **UI Components**: Radix UI
-- **Notifications**: Web Push API
+- **Framework**: Next.js 15 (App Router)
+- **Database**: PostgreSQL with Prisma ORM
+- **Styling**: Tailwind CSS + shadcn/ui
+- **Authentication**: Clerk
+- **State Management**: Zustand
+- **UI Components**: Radix UI primitives
+- **Type Safety**: TypeScript
+
+## Project Structure 📁
+
+```
+xpulse/
+├── app/                    # Next.js App Router pages and API routes
+│   ├── api/               # Backend API endpoints
+│   ├── dashboard/         # Dashboard pages
+│   └── components/        # App-specific components
+├── components/            # Shared UI components
+│   └── ui/               # shadcn/ui components
+├── lib/                   # Utilities and database
+│   ├── db.ts             # Database client
+│   ├── store.ts          # Zustand store
+│   ├── types.ts          # TypeScript types
+│   └── utils.ts          # Helper functions
+└── prisma/               # Database schema and migrations
+```
 
 ## Getting Started 🚀
 
@@ -36,48 +55,57 @@ XPulse is a modern habit-tracking application that turns your daily tasks into a
    npm install
    ```
 
-3. Create a `.env.local` file with your Clerk credentials:
+3. Set up environment variables in `.env.local`:
 
    ```
+   # Clerk Authentication
    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_publishable_key
    CLERK_SECRET_KEY=your_secret_key
+
+   # Database
+   DATABASE_URL="your_database_url"
    ```
 
-4. Run the development server:
+4. Set up the database:
+
+   ```bash
+   npx prisma generate
+   npx prisma db push
+   ```
+
+5. Run the development server:
 
    ```bash
    npm run dev
    ```
 
-5. Open [http://localhost:3000](http://localhost:3000) in your browser.
+6. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Project Structure 📁
+## Features in Detail 🎯
 
-```
-xpulse/
-├── app/                    # Next.js App Router pages
-├── components/             # Reusable UI components
-│   ├── ui/                # ShadcnUI components
-│   └── ...                # Custom components
-├── lib/                   # Utility functions
-├── public/                # Static assets
-└── ...
-```
+### Quests
 
-## Contributing 🤝
+- Create custom quests with titles, descriptions, and durations
+- Choose from multiple quest types (Focus, Creativity, Physical, etc.)
+- Track quest progress with built-in timers
+- Earn XP upon quest completion
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+### Rewards
 
-## License 📝
+- Create personalized rewards
+- Set XP costs for rewards
+- Time-based reward system
+- Track claimed rewards
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+### Points System
+
+- Earn XP by completing quests
+- Spend XP on rewards
+- Real-time points tracking
+- Persistent points storage
 
 ## Acknowledgments 🙏
 
-- Inspired by [Habitica](https://habitica.com/)
 - UI components from [shadcn/ui](https://ui.shadcn.com/)
 - Authentication by [Clerk](https://clerk.dev/)
+- Database ORM by [Prisma](https://www.prisma.io/)
