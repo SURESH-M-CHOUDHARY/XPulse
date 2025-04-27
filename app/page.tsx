@@ -1,15 +1,14 @@
+
 import { auth } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
 import { NavBar } from "@/components/nav-bar";
 import { AuthButtons } from "@/components/auth-buttons";
+import { redirect } from 'next/navigation';
 
 export default async function Home() {
   const { userId } = auth();
-
   if (userId) {
-    redirect("/dashboard");
+    redirect('/dashboard');
   }
-
   return (
     <div className="flex min-h-screen flex-col">
       <NavBar />
@@ -138,3 +137,4 @@ export default async function Home() {
     </div>
   );
 }
+

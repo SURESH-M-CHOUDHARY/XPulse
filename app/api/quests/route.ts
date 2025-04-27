@@ -1,57 +1,54 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs";
-import { prisma } from "@/lib/db";
+import {v4 as uuidv4} from 'uuid'
+
+const validQuestTypes = ["DAILY", "WEEKLY", "EVENT"];
+
+interface Quest {
+  id: string;
+  title: string;
+  description: string;
+  duration: number;
+  type: string;
+  xp: number;
+  userId: string;
+}
+
+const quests: Quest[] = [];
 
 export async function POST(req: Request) {
-  try {
+try {
     const { userId } = auth();
     if (!userId) {
-      return new NextResponse("Unauthorized", { status: 401 });
+      return new NextResponse("Unauthorized", {
+        status: 401,
+      });
     }
 
-    const body = await req.json();
+    const body = await req.json() as {
+      title: string;
+      description: string;
+      duration: number;
+      type: string;
+      xp: number;
+    };
     const { title, description, duration, type, xp } = body;
-
-    const user = await prisma.user.findUnique({
-      where: {
-        clerkId: userId,
-      },
-    });
-
-    if (!user) {
-      // Create user if they don't exist
-      const newUser = await prisma.user.create({
-        data: {
-          clerkId: userId,
-        },
-      });
-
-      const quest = await prisma.quest.create({
-        data: {
-          title,
-          description,
-          duration,
-          type: type.toUpperCase(),
-          xp,
-          userId: newUser.id,
-        },
-      });
-
-      return NextResponse.json(quest);
+    if (!validQuestTypes.includes(type.toUpperCase())) {
+      return new NextResponse("Invalid quest type", { status: 400 });
     }
 
-    const quest = await prisma.quest.create({
-      data: {
-        title,
-        description,
-        duration,
-        type: type.toUpperCase(),
-        xp,
-        userId: user.id,
-      },
-    });
+    const newQuest: Quest = {
+      id: uuidv4(),
+      title: title,
+      description: description,
+      duration: duration,
+      type: type.toUpperCase(),
+      xp: xp,
+      userId: userId,
+    };
+    quests.push(newQuest);
 
-    return NextResponse.json(quest);
+    return NextResponse.json(newQuest);
   } catch (error) {
     console.error("[QUESTS_POST]", error);
     return new NextResponse("Internal Error", { status: 500 });
@@ -65,26 +62,9 @@ export async function GET(req: Request) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    const user = await prisma.user.findUnique({
-      where: {
-        clerkId: userId,
-      },
-    });
+    const userQuests = quests.filter((quest) => quest.userId === userId);
 
-    if (!user) {
-      return NextResponse.json([]);
-    }
-
-    const quests = await prisma.quest.findMany({
-      where: {
-        userId: user.id,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-
-    return NextResponse.json(quests);
+    return NextResponse.json(userQuests);
   } catch (error) {
     console.error("[QUESTS_GET]", error);
     return new NextResponse("Internal Error", { status: 500 });

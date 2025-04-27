@@ -110,10 +110,16 @@ export default function DashboardPage() {
     });
 
     // Set timer to complete quest
-    setTimeout(() => {
-      completeQuest(questId);
-    }, quests.find((q) => q.id === questId)?.duration! * 60 * 1000);
+    const foundQuest = quests.find((q) => q.id === questId);
+    if(foundQuest){
+        setTimeout(() => {
+          completeQuest(questId);
+        }, foundQuest.duration * 60 * 1000);
+    }
   };
+
+
+
 
   const completeQuest = (questId: string) => {
     setQuests(
@@ -133,6 +139,7 @@ export default function DashboardPage() {
         return quest;
       })
     );
+
   };
 
   const skipQuest = (questId: string) => {
@@ -153,7 +160,6 @@ export default function DashboardPage() {
       })
     );
   };
-
   return (
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -220,15 +226,17 @@ export default function DashboardPage() {
                       </span>
                     </div>
                     {quest.inProgress && (
-                      <Progress
-                        value={
-                          ((new Date().getTime() -
-                            (quest.startTime?.getTime() || 0)) /
-                            (quest.duration * 60 * 1000)) *
-                          100
-                        }
-                      />
+                      <Progress 
+                        value={(() => {
+                          if (quest.duration === 0) return 0;
+                          const elapsedTime = quest.startTime ? new Date().getTime() - quest.startTime.getTime() : 0;
+                          let progress = (elapsedTime / (quest.duration * 60 * 1000)) * 100;
+                          if (progress < 0) progress = 0;
+                          if (progress > 100) progress = 100;
+                          return progress;
+                        })()} />
                     )}
+
                     <div className="flex gap-2">
                       {!quest.completed &&
                         !quest.skipped &&
@@ -277,3 +285,4 @@ export default function DashboardPage() {
     </div>
   );
 }
+
