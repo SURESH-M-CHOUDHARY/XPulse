@@ -6,18 +6,6 @@ export type StatType =
   | "social"
   | "wellness";
 
-export interface Quest {
-  id: string;
-  title: string;
-  description: string;
-  duration: number; // in minutes
-  type: StatType;
-  xp: number; // equal to duration
-  completed: boolean;
-  skipped: boolean;
-  inProgress: boolean;
-  startTime?: Date;
-}
 
 export interface Reward {
   id: string;
@@ -30,3 +18,17 @@ export interface Reward {
   startTime?: Date;
   endTime?: Date;
 }
+
+export interface Quest {
+  id: string;
+  title: string;
+  description: string;
+  duration: number;
+  type: StatType;
+  xp: number;
+  completed: boolean;
+  skipped: boolean;
+  inProgress: boolean;
+  startTime?: Date;
+}
+
